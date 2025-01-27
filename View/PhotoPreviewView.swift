@@ -4,7 +4,6 @@
 //
 //  Created by OLIVER LIAO on 2024/12/19.
 //
-
 import SwiftUI
 import PhotosUI
 import SwiftData
@@ -30,6 +29,9 @@ struct PhotoPreviewView: View {
     @State private var lastOffset: CGSize = .zero
     @State private var draggingStampIndex: Int?
     @State private var initialPosition: CGPoint?
+    @State private var textPosition: CGPoint = CGPoint(x: 150, y: 150)
+    @State private var textSize: CGFloat = 24
+    @State private var isDeleteMode = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -65,6 +67,17 @@ struct PhotoPreviewView: View {
                                 }
                         )
                     
+                    Text(string)
+                            .font(.system(size: textSize))
+                            .foregroundColor(textColor)
+                            .position(textPosition)
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { value in
+                                        textPosition = value.location
+                                    }
+                            )
+                    
                     ForEach(stamps.indices, id: \.self) { index in
                         Text(stamps[index].name)
                             .font(.system(size: stamps[index].size))
@@ -95,6 +108,12 @@ struct PhotoPreviewView: View {
                                         stamps[index].size = newSize
                                     }
                             )
+                            .onTapGesture {
+                                if isDeleteMode {
+                                    deleteStamp(at: index)
+                                    isDeleteMode = false
+                                }
+                            }
                     }
                     
                     ForEach(texts.indices, id: \.self) { index in
@@ -120,26 +139,36 @@ struct PhotoPreviewView: View {
                     Text(achievementDate.formatted())
                     
                     if stringbtn {
-                        TextField("输入文字", text: $string, onCommit: addText)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
-                            .padding()
-                            .toolbar {
-                                ToolbarItemGroup(placement: .keyboard) {
-                                    Spacer()
-                                    Button("完成") {
-                                        UIApplication.shared.endEditing()
-                                    }
+                        VStack {
+                            TextField("输入文字", text: $string, onCommit: addText)
+                                .textFieldStyle(RoundedBorderTextFieldStyle())
+                                .padding()
+                        }
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("完成") {
+                                    UIApplication.shared.endEditing()
                                 }
                             }
+                        }
                     }
                     
                     HStack {
-                        Button("添加文本") {
+                        Button(action: {
                             stringbtn.toggle()
+                        }) {
+                            Image(systemName: "textformat.size.smaller")
+                                .resizable()
+                                .frame(width: 20, height: 20)
                         }
                         
-                        Button("添加贴纸") {
+                        Button(action: {
                             showStampSheet = true
+                        }) {
+                            Image(systemName: "face.dashed.fill")
+                                .resizable()
+                                .frame(width: 20, height: 20)
                         }
                         .sheet(isPresented: $showStampSheet) {
                             StampListView(stamp: $selectedstamp)
@@ -149,6 +178,15 @@ struct PhotoPreviewView: View {
                                 stamps.append(Stamp(name: newStamp, position: CGPoint(x: 150, y: 150)))
                                 selectedstamp = nil
                             }
+                        }
+                        
+                        Button(action: {
+                            isDeleteMode.toggle()
+                        }) {
+                            Image(systemName: "trash")
+                                .resizable()
+                                .frame(width: 20, height: 20)
+                                .foregroundColor(isDeleteMode ? .red : .black)
                         }
                         
                         Button("保存") {
@@ -163,6 +201,10 @@ struct PhotoPreviewView: View {
                 .padding(.bottom, 20)
             }
         }
+    }
+    
+    private func deleteStamp(at index: Int) {
+        stamps.remove(at: index)
     }
     
     private func editText(_ textitem: TextItems) {
@@ -239,10 +281,11 @@ struct Stamp: Identifiable {
     var size: CGFloat = 100
 }
 
+
 struct StampListView: View {
     @Binding var stamp: String?
     @Environment(\.presentationMode) var presentationMode
-    let stampSet = ["🫶🏼", "👹", "🤡", "😻", "🫷🏼", "🫸🏼", "🤌🏼", "🫴🏼"]
+    var stampSet = ["🫶🏼", "👹", "🤡", "😻", "🫷🏼", "🫸🏼", "🤌🏼", "🫴🏼", "🐶", "🐻‍❄️", "🐮", "🙉", "🙊", "🐽", "🐷", "🐸", "🐣", "🐤", "🦉", "🇯🇵", "💴", "👺", "🍡", "🗾", "🎌", "🍣", "🍘", "🎏", "🇰🇷", "🇭🇰", "🦴", "🥥", "🫐", "🥑", "🥨", "🍓", "🍇", "🍒", "🍑", "🍍", "🍊", "🍋", "🍉", "🍈", "🍏", "🍎", "🍌", "🍐", "🍅", "🍆", "🥦", "🥬", "🥒", "🌶", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🍠", "🥔", "🥖", "🥯", "🥐", "🍞", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🫔", "🥙", "🧆", "🥚", "🍳", "🥘", "🍲", "🫕", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🎏", "🍢", "🈵", "🈲", "㊗️", "📿", "🇺🇸", "🇹🇼", "🇰🇷", "🇭🇰", "🦴", "🥥", "🫐", "🥑", "🥨", "🍓", "🍇", "🍒", "🍑", "🍍", "🍊", "🍋", "🍉", "🍈", "🍏", "🍎", "🍌", "🍐", "🍅", "🍆", "🥦", "🥬", "🥒", "🌶", "🫑", "🌽", "🥕", "🫒", "    🧄", "🧅", "🍠", "🥔", "🥖", "🥯", "🥐", "🍞", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮"]
     
     var body: some View {
         ScrollView {
@@ -251,8 +294,6 @@ struct StampListView: View {
                     Text(stamp)
                         .font(.largeTitle)
                         .frame(width: 80, height: 80)
-                        .background(Color.gray.opacity(0.2))
-                        .cornerRadius(10)
                         .onTapGesture {
                             self.stamp = stamp
                             presentationMode.wrappedValue.dismiss()

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import CoreNFC
 
 struct CardView: View {
     @State private var text: String = ""
@@ -43,7 +44,7 @@ struct CardView: View {
                 ScrollView(.vertical) {
                     VStack(spacing: 20) {
                         if nfcManager.receivedCards.isEmpty {
-                            Text("目前没有交换的名片")
+                            Text("名刺が見つかりません")
                                 .foregroundColor(.gray)
                         } else {
                             ForEach(nfcManager.receivedCards) { card in
