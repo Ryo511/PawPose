@@ -18,7 +18,6 @@
 		A757BEE32D13B1DF007CBF26 /* PhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757BEE22D13B1DF007CBF26 /* PhotoPreviewView.swift */; };
 		A79908F62D1B8FDD0026F220 /* CameraPhotoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79908F52D1B8FDD0026F220 /* CameraPhotoView.swift */; };
 		A79908F82D26B4F60026F220 /* MyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79908F72D26B4F60026F220 /* MyCardView.swift */; };
-		A79E14AE2D435E3100469E93 /* NFCManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79E14AD2D435E3100469E93 /* NFCManager.swift */; };
 		A7FE66482D0FCC56009D0578 /* SoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FE66472D0FCC56009D0578 /* SoundView.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +34,6 @@
 		A757BEE22D13B1DF007CBF26 /* PhotoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewView.swift; sourceTree = "<group>"; };
 		A79908F52D1B8FDD0026F220 /* CameraPhotoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotoView.swift; sourceTree = "<group>"; };
 		A79908F72D26B4F60026F220 /* MyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCardView.swift; sourceTree = "<group>"; };
-		A79E14AD2D435E3100469E93 /* NFCManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NFCManager.swift; sourceTree = "<group>"; };
 		A7FE66472D0FCC56009D0578 /* SoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -108,7 +106,6 @@
 				A7FE66472D0FCC56009D0578 /* SoundView.swift */,
 				A7143EC62D09160F0061B5D5 /* CardView.swift */,
 				A79908F72D26B4F60026F220 /* MyCardView.swift */,
-				A79E14AD2D435E3100469E93 /* NFCManager.swift */,
 				A757BED72D1251AE007CBF26 /* Sound */,
 			);
 			path = View;
@@ -195,7 +192,6 @@
 				A79908F62D1B8FDD0026F220 /* CameraPhotoView.swift in Sources */,
 				A757BEE32D13B1DF007CBF26 /* PhotoPreviewView.swift in Sources */,
 				A7143EB12D0915480061B5D5 /* ContentView.swift in Sources */,
-				A79E14AE2D435E3100469E93 /* NFCManager.swift in Sources */,
 				A79908F82D26B4F60026F220 /* MyCardView.swift in Sources */,
 				A757BEDF2D13A8BD007CBF26 /* ImagePickerView.swift in Sources */,
 				A7143EC52D0915FC0061B5D5 /* HomeView.swift in Sources */,
@@ -336,7 +332,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PawPose/Preview Content\"";
-				DEVELOPMENT_TEAM = Z57LXP8H6A;
+				DEVELOPMENT_TEAM = D9BL4WP6X7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawPose/Info.plist;
@@ -355,7 +351,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Oliver-Liao.PawPose";
+				PRODUCT_BUNDLE_IDENTIFIER = "Oliver-Liao.PawPose20250127";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -372,7 +368,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"PawPose/Preview Content\"";
-				DEVELOPMENT_TEAM = Z57LXP8H6A;
+				DEVELOPMENT_TEAM = D9BL4WP6X7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawPose/Info.plist;
@@ -391,7 +387,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "Oliver-Liao.PawPose";
+				PRODUCT_BUNDLE_IDENTIFIER = "Oliver-Liao.PawPose20250127";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

@@ -4,6 +4,7 @@
 //
 //  Created by OLIVER LIAO on 2024/12/19.
 //
+
 import SwiftUI
 import PhotosUI
 import SwiftData
@@ -68,15 +69,15 @@ struct PhotoPreviewView: View {
                         )
                     
                     Text(string)
-                            .font(.system(size: textSize))
-                            .foregroundColor(textColor)
-                            .position(textPosition)
-                            .gesture(
-                                DragGesture()
-                                    .onChanged { value in
-                                        textPosition = value.location
-                                    }
-                            )
+                        .font(.system(size: textSize))
+                        .foregroundColor(textColor)
+                        .position(textPosition)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { value in
+                                    textPosition = value.location
+                                }
+                        )
                     
                     ForEach(stamps.indices, id: \.self) { index in
                         Text(stamps[index].name)
@@ -160,7 +161,7 @@ struct PhotoPreviewView: View {
                         }) {
                             Image(systemName: "textformat.size.smaller")
                                 .resizable()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 30, height: 30)
                         }
                         
                         Button(action: {
@@ -168,7 +169,7 @@ struct PhotoPreviewView: View {
                         }) {
                             Image(systemName: "face.dashed.fill")
                                 .resizable()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 30, height: 30)
                         }
                         .sheet(isPresented: $showStampSheet) {
                             StampListView(stamp: $selectedstamp)
@@ -185,12 +186,16 @@ struct PhotoPreviewView: View {
                         }) {
                             Image(systemName: "trash")
                                 .resizable()
-                                .frame(width: 20, height: 20)
+                                .frame(width: 30, height: 30)
                                 .foregroundColor(isDeleteMode ? .red : .black)
                         }
                         
-                        Button("保存") {
+                        Button(action: {
                             saveEditedPhoto()
+                        }) {
+                            Image(systemName: "square.and.arrow.down")
+                                .resizable()
+                                .frame(width: 30, height: 30)
                         }
                         .padding()
                         .background(Color.black.opacity(0.6))
@@ -243,26 +248,23 @@ struct PhotoPreviewView: View {
             }
         })
         
-        if let editedImage = renderer.uiImage {
-            if let photoData = editedImage.jpegData(compressionQuality: 1.0) {
-                
-                let latitude = locationManager.lastKnownlocation?.coordinate.latitude
-                let longitude = locationManager.lastKnownlocation?.coordinate.longitude
-                
-                let newItem = Item(timestamp: Date(),
-                                   photoData: photoData,
-                                   latitude: latitude,
-                                   longitude: longitude)
-                
-                
-                modelContext.insert(newItem)
-                onSave(editedImage)
-                
-            } else {
-                print("无法生成照片数据")
+        if let editedImage = renderer.uiImage, let photoData = editedImage.jpegData(compressionQuality: 1.0) {
+            let latitude = locationManager.lastKnownlocation?.coordinate.latitude
+            let longitude = locationManager.lastKnownlocation?.coordinate.longitude
+            
+            let newItem = Item(timestamp: Date(), photoData: photoData, latitude: latitude, longitude: longitude)
+            modelContext.insert(newItem)
+            
+            do {
+                try modelContext.save()
+                print("图片保存成功")
+            } catch {
+                print("保存失败: \(error.localizedDescription)")
             }
+            
+            onSave(editedImage)
         } else {
-            print("渲染失败")
+            print("无法生成图片")
         }
     }
 }
@@ -281,11 +283,10 @@ struct Stamp: Identifiable {
     var size: CGFloat = 100
 }
 
-
 struct StampListView: View {
     @Binding var stamp: String?
     @Environment(\.presentationMode) var presentationMode
-    var stampSet = ["🫶🏼", "👹", "🤡", "😻", "🫷🏼", "🫸🏼", "🤌🏼", "🫴🏼", "🐶", "🐻‍❄️", "🐮", "🙉", "🙊", "🐽", "🐷", "🐸", "🐣", "🐤", "🦉", "🇯🇵", "💴", "👺", "🍡", "🗾", "🎌", "🍣", "🍘", "🎏", "🇰🇷", "🇭🇰", "🦴", "🥥", "🫐", "🥑", "🥨", "🍓", "🍇", "🍒", "🍑", "🍍", "🍊", "🍋", "🍉", "🍈", "🍏", "🍎", "🍌", "🍐", "🍅", "🍆", "🥦", "🥬", "🥒", "🌶", "🫑", "🌽", "🥕", "🫒", "🧄", "🧅", "🍠", "🥔", "🥖", "🥯", "🥐", "🍞", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🫔", "🥙", "🧆", "🥚", "🍳", "🥘", "🍲", "🫕", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🎏", "🍢", "🈵", "🈲", "㊗️", "📿", "🇺🇸", "🇹🇼", "🇰🇷", "🇭🇰", "🦴", "🥥", "🫐", "🥑", "🥨", "🍓", "🍇", "🍒", "🍑", "🍍", "🍊", "🍋", "🍉", "🍈", "🍏", "🍎", "🍌", "🍐", "🍅", "🍆", "🥦", "🥬", "🥒", "🌶", "🫑", "🌽", "🥕", "🫒", "    🧄", "🧅", "🍠", "🥔", "🥖", "🥯", "🥐", "🍞", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮"]
+    var stampSet = ["🫶🏼", "👹", "🤡", "😻", "🫷🏼", "🫸🏼", "🤌🏼", "🫴🏼", "🐶", "🐻‍❄️", "🐮", "🙉", "🙊", "🐽", "🐷", "🐸", "🐣", "🐤", "🦉", "🇯🇵", "💴", "👺", "🍡", "🗾", "🎌", "🍣", "🧄", "🧅", "🍠", "🥔", "🥖", "🥯", "🥐", "🍞", "🥞", "🧇", "🧀", "🍖", "🍗", "🥩", "🥓", "🍔", "🍟", "🍕", "🌭", "🥪", "🌮", "🌯", "🫔", "🥙", "🧆", "🥚", "🍳", "🥘", "🍲", "🫕", "🥣", "🥗", "🍿", "🧈", "🧂", "🥫", "🍱", "🍘", "🎏", "🍢", "🈵", "🈲", "㊗️", "📿", "🇺🇸", "🇹🇼", "🇰🇷", "🇭🇰", "🦴", "🥥", "🫐", "🥑", "🥨", "🍓", "🍇", "🍒", "🍑", "🍍", "🍊", "🍋", "🍉", "🍈", "🍏", "🍎", "🍌", "🍐", "🍅", "🍆", "🥦", "🥬", "🥒", "🌶", "🫑", "🌽", "🥕", "🫒"]
     
     var body: some View {
         ScrollView {
