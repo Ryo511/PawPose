@@ -13,6 +13,9 @@
 		A7143EC92D09161E0061B5D5 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7143EC82D09161E0061B5D5 /* MapView.swift */; };
 		A7143ED82D0926CB0061B5D5 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7143ED72D0926CB0061B5D5 /* LocationManager.swift */; };
 		A7143EE42D0A8AE20061B5D5 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7143EE32D0A8AE20061B5D5 /* CameraView.swift */; };
+		A75681132D4A7F3000D4E141 /* MyCardCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75681122D4A7F3000D4E141 /* MyCardCheckView.swift */; };
+		A75681152D4A7F5700D4E141 /* MyCardEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75681142D4A7F5700D4E141 /* MyCardEditView.swift */; };
+		A75681172D4B004300D4E141 /* MultipeerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75681162D4B004300D4E141 /* MultipeerManager.swift */; };
 		A757BEDF2D13A8BD007CBF26 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757BEDE2D13A8BD007CBF26 /* ImagePickerView.swift */; };
 		A757BEE12D13AF70007CBF26 /* CameraToolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757BEE02D13AF70007CBF26 /* CameraToolView.swift */; };
 		A757BEE32D13B1DF007CBF26 /* PhotoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A757BEE22D13B1DF007CBF26 /* PhotoPreviewView.swift */; };
@@ -29,6 +32,9 @@
 		A7143EC82D09161E0061B5D5 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		A7143ED72D0926CB0061B5D5 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		A7143EE32D0A8AE20061B5D5 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		A75681122D4A7F3000D4E141 /* MyCardCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCardCheckView.swift; sourceTree = "<group>"; };
+		A75681142D4A7F5700D4E141 /* MyCardEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCardEditView.swift; sourceTree = "<group>"; };
+		A75681162D4B004300D4E141 /* MultipeerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipeerManager.swift; sourceTree = "<group>"; };
 		A757BEDE2D13A8BD007CBF26 /* ImagePickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		A757BEE02D13AF70007CBF26 /* CameraToolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraToolView.swift; sourceTree = "<group>"; };
 		A757BEE22D13B1DF007CBF26 /* PhotoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPreviewView.swift; sourceTree = "<group>"; };
@@ -105,7 +111,10 @@
 				A757BEDE2D13A8BD007CBF26 /* ImagePickerView.swift */,
 				A7FE66472D0FCC56009D0578 /* SoundView.swift */,
 				A7143EC62D09160F0061B5D5 /* CardView.swift */,
+				A75681142D4A7F5700D4E141 /* MyCardEditView.swift */,
+				A75681122D4A7F3000D4E141 /* MyCardCheckView.swift */,
 				A79908F72D26B4F60026F220 /* MyCardView.swift */,
+				A75681162D4B004300D4E141 /* MultipeerManager.swift */,
 				A757BED72D1251AE007CBF26 /* Sound */,
 			);
 			path = View;
@@ -190,11 +199,14 @@
 				A757BEE12D13AF70007CBF26 /* CameraToolView.swift in Sources */,
 				A7143EE42D0A8AE20061B5D5 /* CameraView.swift in Sources */,
 				A79908F62D1B8FDD0026F220 /* CameraPhotoView.swift in Sources */,
+				A75681132D4A7F3000D4E141 /* MyCardCheckView.swift in Sources */,
 				A757BEE32D13B1DF007CBF26 /* PhotoPreviewView.swift in Sources */,
+				A75681172D4B004300D4E141 /* MultipeerManager.swift in Sources */,
 				A7143EB12D0915480061B5D5 /* ContentView.swift in Sources */,
 				A79908F82D26B4F60026F220 /* MyCardView.swift in Sources */,
 				A757BEDF2D13A8BD007CBF26 /* ImagePickerView.swift in Sources */,
 				A7143EC52D0915FC0061B5D5 /* HomeView.swift in Sources */,
+				A75681152D4A7F5700D4E141 /* MyCardEditView.swift in Sources */,
 				A7FE66482D0FCC56009D0578 /* SoundView.swift in Sources */,
 				A7143EC72D09160F0061B5D5 /* CardView.swift in Sources */,
 				A7143ED82D0926CB0061B5D5 /* LocationManager.swift in Sources */,
@@ -336,9 +348,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawPose/Info.plist;
-				INFOPLIST_KEY_NFCReaderUsageDescription = "";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = Bluetooth;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要訪問相機以進行拍照";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "air drop";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "find my location";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -372,9 +385,10 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = PawPose/Info.plist;
-				INFOPLIST_KEY_NFCReaderUsageDescription = "";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = Bluetooth;
 				INFOPLIST_KEY_NSCameraUsageDescription = "需要訪問相機以進行拍照";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "";
+				INFOPLIST_KEY_NSLocalNetworkUsageDescription = "air drop";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "find my location";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

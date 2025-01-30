@@ -12,7 +12,8 @@ import SwiftData
 struct PawPoseApp: App {
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
-            Item.self
+            Item.self,
+            CardItem.self
         ])
         
         let modelConfiguration = ModelConfiguration(
@@ -33,7 +34,7 @@ struct PawPoseApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(sharedModelContainer)
+                .modelContainer(for: [CardItem.self, Item.self])
         }
     }
 }
