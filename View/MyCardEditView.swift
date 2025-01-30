@@ -6,11 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MyCardEditView: View {
+    @Environment(\.dismiss) private var dismiss
     @State var name: String = ""
     @State var birthYear: String = ""
     @State var gender: String = " オス"
+    @State private var editing = false
+    @Bindable var card: CardItem
     
     var body: some View {
         NavigationStack {
@@ -18,13 +22,13 @@ struct MyCardEditView: View {
                 Text("名前")
                     .font(.system(size: 18))
                 
-                TextField("名前を入力してください", text: $name)
+                TextField("名前を入力してください", text: $card.name)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 Text("生まれた年（西暦）")
                     .font(.system(size: 18))
                 
-                TextField("例: 2010", text: $birthYear)
+                TextField("例: 2010", text: $card.birthYear)
                     .keyboardType(.numberPad)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
@@ -32,19 +36,19 @@ struct MyCardEditView: View {
                     .font(.system(size: 18))
                 
                 HStack {
-                    Button(action: { gender = "オス" }) {
+                    Button(action: { card.gender = "オス" }) {
                         HStack {
-                            Image(systemName: gender == "オス" ? "largecircle.fill.circle" : "circle")
-                                .foregroundColor(gender == "オス" ? .blue : .gray)
+                            Image(systemName: card.gender == "オス" ? "largecircle.fill.circle" : "circle")
+                                .foregroundColor(card.gender == "オス" ? .blue : .gray)
                             Text("オス")
                         }
                         .padding()
                     }
                     
-                    Button(action: { gender = "メス" }) {
+                    Button(action: { card.gender = "メス" }) {
                         HStack {
-                            Image(systemName: gender == "メス" ? "largecircle.fill.circle" : "circle")
-                                .foregroundColor(gender == "メス" ? .pink : .gray)
+                            Image(systemName: card.gender == "メス" ? "largecircle.fill.circle" : "circle")
+                                .foregroundColor(card.gender == "メス" ? .pink : .gray)
                             Text("メス")
                         }
                         .padding()
@@ -55,18 +59,18 @@ struct MyCardEditView: View {
             }
             .padding()
             
-            VStack(alignment: .center, spacing: 30) {
-                NavigationLink(destination: MyCardCheckView(name: name, birthYear: birthYear, gender: gender)) {
-                    ZStack {
-                        Rectangle()
-                            .fill(Color.gray)
-                            .frame(width: 80, height: 50)
-                            .cornerRadius(15)
-                        Text("確認")
-                            .foregroundColor(.white)
-                            .bold()
-                    }
-                    .padding()
+            Button {
+                dismiss()
+            } label: {
+                ZStack {
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(width: 100, height: 50)
+                        .cornerRadius(15)
+                    
+                    Text("保存")
+                        .foregroundColor(.white)
+                        .bold()
                 }
             }
         }
@@ -76,5 +80,5 @@ struct MyCardEditView: View {
 
 
 #Preview {
-    MyCardEditView()
+    MyCardEditView(card: CardItem(name: "トム", birthYear: "2015", gender: "オス"))
 }

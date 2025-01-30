@@ -12,9 +12,10 @@ struct CardView: View {
     @StateObject private var manager = MultipeerManager()
     @State private var messagetext: String = ""
     @State private var name: String = ""
+    @State var birthYear: String = ""
+    @State var gender: String = " オス"
     @Query private var cards: [CardItem]
-    @State private var path = NavigationPath()
-    
+    @Environment(\.modelContext) private var modelContext
     var body: some View {
         NavigationStack {
             HStack {
@@ -22,41 +23,53 @@ struct CardView: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                 
-                NavigationLink(destination: MyCardEditView()) {
+                NavigationLink(destination: MyCardView(name: name, birthYear: birthYear, gender: gender)) {
                     Image(systemName: "person.circle")
-                        .font(.largeTitle)
+                        .font(.system(size: 40))
                 }
             }
             Spacer()
             
-//            VStack {
-//                List(manager.messages, id: \.self) { message in
-//                    Text(message)
-//                        .font(.caption)
-//                        .foregroundColor(.secondary)
-//                }
-//                
-//                Button {
-//                    manager.sendMessage(messagetext)
-//                    messagetext = ""
-//                } label: {
-//                    Text("Send")
-//                }
-//                .disabled(!manager.isConnected)
-//                .padding()
-//            }
+            //            VStack {
+            //                List(manager.messages, id: \.self) { message in
+            //                    Text(message)
+            //                        .font(.caption)
+            //                        .foregroundColor(.secondary)
+            //                }
+            //
+            //                Button {
+            //                    manager.sendMessage(messagetext)
+            //                    messagetext = ""
+            //                } label: {
+            //                    Text("Send")
+            //                }
+            //                .disabled(!manager.isConnected)
+            //                .padding()
+            //            }
             
             VStack {
                 List(cards) { card in
                     Text(card.name)
                         .font(.callout)
-                    Text("\(card.birthYear) 歳")
+                    Text("\(card.age) 歳")
                         .font(.caption)
                     Text(card.gender)
                         .font(.caption)
+                    
+//                        .swipeActions {
+//                            Button(role: .destructive) {
+//                                deleteCard(card)
+//                            } label: {
+//                                Label("刪除", systemImage: "trash")
+//                            }
+//                        }
                 }
             }
         }
+    }
+    private func deleteCard(_ card: CardItem) {
+        modelContext.delete(card)
+        try? modelContext.save()
     }
 }
 
