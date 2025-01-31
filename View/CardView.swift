@@ -14,6 +14,7 @@ struct CardView: View {
     @State private var name: String = ""
     @State var birthYear: String = ""
     @State var gender: String = " オス"
+    @AppStorage("myCardID") private var myCardID: String?
     @Query private var cards: [CardItem]
     @Environment(\.modelContext) private var modelContext
     var body: some View {
@@ -29,6 +30,34 @@ struct CardView: View {
                 }
             }
             Spacer()
+            
+            VStack {
+                            List(manager.receivedCards) { card in // ✅ 只顯示收到的名片
+                                if card.id.uuidString != myCardID { // ✅ 過濾掉自己的名片
+                                    VStack(alignment: .leading) {
+                                        Text("名前: \(card.name)")
+                                            .font(.headline)
+                                        Text("年齢: \(card.age) 歳")
+                                            .font(.subheadline)
+                                        Text("性別: \(card.gender)")
+                                            .font(.subheadline)
+                                    }
+                                    .padding()
+                                }
+                            }
+                        }
+                        .onAppear {
+                            if let myCard = cards.first {
+                                myCardID = myCard.id.uuidString // ✅ 設定自己的名片 ID
+                            }
+                        }
+                        .onReceive(manager.$receivedCards) { newCards in
+                            for card in newCards {
+                                if card.id.uuidString != myCardID { // ✅ 過濾自己的名片
+                                    modelContext.insert(card) // ✅ 存入 SwiftData
+                                }
+                            }
+                        }
             
             //            VStack {
             //                List(manager.messages, id: \.self) { message in
@@ -47,14 +76,14 @@ struct CardView: View {
             //                .padding()
             //            }
             
-            VStack {
-                List(cards) { card in
-                    Text(card.name)
-                        .font(.callout)
-                    Text("\(card.age) 歳")
-                        .font(.caption)
-                    Text(card.gender)
-                        .font(.caption)
+//            VStack {
+//                List(cards) { card in
+//                    Text(card.name)
+//                        .font(.callout)
+//                    Text("\(card.age) 歳")
+//                        .font(.caption)
+//                    Text(card.gender)
+//                        .font(.caption)
                     
 //                        .swipeActions {
 //                            Button(role: .destructive) {
@@ -63,8 +92,8 @@ struct CardView: View {
 //                                Label("刪除", systemImage: "trash")
 //                            }
 //                        }
-                }
-            }
+//                }
+//            }
         }
     }
     private func deleteCard(_ card: CardItem) {

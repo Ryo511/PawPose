@@ -35,6 +35,7 @@ struct MyCardView: View {
         NavigationStack {
             VStack {
                 Spacer()
+                if let card = cards.first {
                 ZStack {
                     Rectangle()
                         .fill(Color.brown.opacity(0.8))
@@ -74,7 +75,7 @@ struct MyCardView: View {
                         }
                         .padding(.bottom, 40)
                         
-                        if let card = cards.first {
+                        
                             Text("名前: \(card.name)")
                                 .font(.system(size: 25))
                                 .padding(5)
@@ -85,9 +86,13 @@ struct MyCardView: View {
                                 .font(.system(size: 25))
                                 .padding(5)
                         }
+                            .foregroundColor(.white)
                     }
-                    .foregroundColor(.white)
+                    .onTapGesture {
+                        manager.sendCard(card) // ✅ 點擊發送名片
+                    }
                 }
+                
                 Spacer()
                 if let card = cards.first {
                     NavigationLink(destination: MyCardEditView(card: card)) {
@@ -104,10 +109,10 @@ struct MyCardView: View {
                     }
                 } else {
                     Button("新規作成") {
-                                            let newCard = CardItem(name: "トム", birthYear: "2014", gender: "オス")
-                                            modelContext.insert(newCard) // ✅ 新增名片
-                                        }
-                                        .padding()
+                        let newCard = CardItem(name: "トム", birthYear: "2014", gender: "オス")
+                        modelContext.insert(newCard) // ✅ 新增名片
+                    }
+                    .padding()
                 }
             }
             .toolbar {

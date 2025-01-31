@@ -17,6 +17,7 @@ class MultipeerManager: NSObject, ObservableObject {
     
     @Published var messages: [String] = []
     @Published var isConnected: Bool = false
+    @Published var receivedCards: [CardItem] = []
 
     override init() {
             super.init()
@@ -48,6 +49,18 @@ class MultipeerManager: NSObject, ObservableObject {
                 print("發送失敗: \(error.localizedDescription)")
             }
         }
+    
+    func sendCard(_ card: CardItem) {
+            do {
+                let jsonData = try JSONEncoder().encode(card)
+                try session.send(jsonData, toPeers: session.connectedPeers, with: .reliable)
+                DispatchQueue.main.async {
+                    self.messages.append("📨 已發送名片: \(card.name)")
+                }
+            } catch {
+                print("❌ 傳送名片失敗: \(error.localizedDescription)")
+            }
+        }
 }
 
 extension MultipeerManager: MCSessionDelegate {
@@ -68,12 +81,25 @@ extension MultipeerManager: MCSessionDelegate {
         }
     }
     
+//    func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+//        guard let message = String(data: data, encoding: .utf8) else { return }
+//        DispatchQueue.main.async {
+//            self.messages.append("\(peerID.displayName): \(message)")
+//        }
+//    }
+    
     func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
-        guard let message = String(data: data, encoding: .utf8) else { return }
-        DispatchQueue.main.async {
-            self.messages.append("\(peerID.displayName): \(message)")
+            if let receivedCard = try? JSONDecoder().decode(CardItem.self, from: data) {
+                DispatchQueue.main.async {
+                    self.receivedCards.append(receivedCard)
+                    self.messages.append("📩 收到名片: \(receivedCard.name)")
+                }
+            } else if let message = String(data: data, encoding: .utf8) {
+                DispatchQueue.main.async {
+                    self.messages.append("\(peerID.displayName): \(message)")
+                }
+            }
         }
-    }
     
     func session(_ session: MCSession, didReceive stream: InputStream, withName streamName: String, fromPeer peerID: MCPeerID) {}
     func session(_ session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, with progress: Progress) {}
