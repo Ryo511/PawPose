@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         ZStack {
@@ -31,7 +32,7 @@ struct ContentView: View {
                     }
                     .tag(2)
                 
-                CardView()
+                CardView(modelContext: modelContext)
                     .tabItem {
                         Label("Find", systemImage: "heart")
                     }

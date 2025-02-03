@@ -9,9 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct MyCardEditView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @State var name: String = ""
-    @State var birthYear: String = ""
+    //    @State var birthYear: String = ""
     @State var gender: String = " オス"
     @State private var editing = false
     @Bindable var card: CardItem
@@ -58,8 +59,14 @@ struct MyCardEditView: View {
                 Spacer()
             }
             .padding()
+            .onAppear {
+                /// ✅ 進入「編輯」時刪除 `birthYear`
+                card.birthYear = ""
+                try? modelContext.save()
+            }
             
             Button {
+                try? modelContext.save()
                 dismiss()
             } label: {
                 ZStack {

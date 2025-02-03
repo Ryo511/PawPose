@@ -9,7 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct MyCardView: View {
-    @StateObject private var manager = MultipeerManager()
+    @StateObject var manager: MultipeerManager
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Query private var item: [Item]
@@ -22,13 +22,15 @@ struct MyCardView: View {
     var birthYear: String
     var gender: String
     
+    @Transient
     var age: Int {
         let currentYear = Calendar.current.component(.year, from: Date())
-        if let birthYearInt = Int(birthYear) {
-            return max(0, currentYear - birthYearInt)
-        } else {
+        guard let birthYearInt = Int(birthYear.trimmingCharacters(in: .whitespacesAndNewlines)),
+              birthYearInt > 1900,
+              birthYearInt <= currentYear else {
             return 0
         }
+        return currentYear - birthYearInt
     }
     
     var body: some View {
@@ -36,57 +38,57 @@ struct MyCardView: View {
             VStack {
                 Spacer()
                 if let card = cards.first {
-                ZStack {
-                    Rectangle()
-                        .fill(Color.brown.opacity(0.8))
-                        .frame(width: 350, height: 550)
-                        .cornerRadius(50)
-                    
-                    VStack {
+                    ZStack {
+                        Rectangle()
+                            .fill(Color.brown.opacity(0.8))
+                            .frame(width: 350, height: 550)
+                            .cornerRadius(50)
+                        
                         VStack {
-                            if let selectedPhoto = selectedPhoto {
-                                Image(uiImage: selectedPhoto)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 150, height: 150)
-                                    .clipShape(Circle())
-                                    .overlay(Circle().stroke(Color.white, lineWidth: 4))
-                                    .shadow(radius: 10)
-                                //                                    .onTapGesture {
-                                //                                        isPhotoPickerPresented = true
-                                //                                    }
-                                //                                    .padding()
-                            } else {
-                                ZStack {
-                                    Circle()
-                                        .fill(Color.gray.opacity(0.9))
-                                        .frame(width: 150, height: 150)
-                                    
-                                    Image(systemName: "photo.on.rectangle")
+                            VStack {
+                                if let selectedPhoto = selectedPhoto {
+                                    Image(uiImage: selectedPhoto)
                                         .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 50, height: 50)
-                                        .foregroundColor(.black)
+                                        .scaledToFill()
+                                        .frame(width: 150, height: 150)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(Color.white, lineWidth: 4))
+                                        .shadow(radius: 10)
+                                    //                                    .onTapGesture {
+                                    //                                        isPhotoPickerPresented = true
+                                    //                                    }
+                                    //                                    .padding()
+                                } else {
+                                    ZStack {
+                                        Circle()
+                                            .fill(Color.gray.opacity(0.9))
+                                            .frame(width: 150, height: 150)
+                                        
+                                        Image(systemName: "photo.on.rectangle")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 50, height: 50)
+                                            .foregroundColor(.black)
+                                    }
+                                    //                                .onTapGesture {
+                                    //                                    isPhotoPickerPresented = true // ✅ 點擊後選擇照片
+                                    //                                }
                                 }
-                                //                                .onTapGesture {
-                                //                                    isPhotoPickerPresented = true // ✅ 點擊後選擇照片
-                                //                                }
                             }
-                        }
-                        .padding(.bottom, 40)
-                        
-                        
+                            .padding(.bottom, 40)
+                            
+                            
                             Text("名前: \(card.name)")
                                 .font(.system(size: 25))
                                 .padding(5)
-                            Text("年齢: \(card.age) 歳")
+                            Text("年齢: \(card.calculateAge()) 歳")
                                 .font(.system(size: 25))
                                 .padding(5)
                             Text("性別: \(card.gender)")
                                 .font(.system(size: 25))
                                 .padding(5)
                         }
-                            .foregroundColor(.white)
+                        .foregroundColor(.white)
                     }
                     .onTapGesture {
                         manager.sendCard(card) // ✅ 點擊發送名片
@@ -130,6 +132,15 @@ struct MyCardView: View {
                 PhotoPickerView(selectedPhoto: $selectedPhoto, items: item, storedPhotoData: $storedPhotoData)
             }
             .onAppear {
+                if let updatedCard = cards.first {
+                    updatedCard.birthYear = updatedCard.birthYear.trimmingCharacters(in: .whitespacesAndNewlines)
+                    
+                    if let storedPhotoData {
+                        updatedCard.imageData = storedPhotoData.base64EncodedString() // ✅ 確保 Base64 存入
+                    }
+                    
+                    try? modelContext.save() // ✅ 確保變更同步
+                }
                 loadStoredPhoto() // ✅ 載入已儲存的照片
             }
         }
@@ -142,5 +153,10 @@ struct MyCardView: View {
 }
 
 #Preview {
-    MyCardView(name: "トム", birthYear: "2014", gender: "オス")
+    if let modelContainer = try? ModelContainer(for: CardItem.self) {
+        let modelContext = ModelContext(modelContainer)
+        return MyCardView(manager: MultipeerManager(modelContext: modelContext), name: "トム", birthYear: "2014", gender: "オス")
+    } else {
+        return Text("⚠️ 無法初始化 ModelContext")
+    }
 }
