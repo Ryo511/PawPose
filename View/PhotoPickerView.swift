@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct PhotoPickerView: View {
-    @Binding var selectedPhoto: UIImage? // ✅ 存儲選擇的照片
-    let items: [Item] // ✅ 從 `HomeView` 獲取的照片
-    @Binding var storedPhotoData: Data? // ✅ 存入 `AppStorage`，保持選擇的照片
+    @Binding var selectedPhoto: UIImage? // 存儲選擇的照片
+    let items: [Item] // 從 `HomeView` 獲取的照片
+    @Binding var storedPhotoData: Data? // 存入 `AppStorage`，保持選擇的照片
 
-    @Environment(\.dismiss) private var dismiss // ✅ 讓視圖能夠關閉
+    @Environment(\.dismiss) private var dismiss // 讓視圖能夠關閉
 
     var body: some View {
         NavigationStack {
@@ -43,19 +43,19 @@ struct PhotoPickerView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button("取消") {
-                        dismiss() // ✅ 讓使用者可以取消選擇
+                        dismiss() // 讓使用者可以取消選擇
                     }
                 }
             }
         }
     }
 
-    /// ✅ 將選擇的 `UIImage` 轉換成 `Data` 並儲存
+    /// 將選擇的 `UIImage` 轉換成 `Data` 並儲存
     private func saveSelectedPhoto(_ image: UIImage) {
         if let imageData = image.jpegData(compressionQuality: 0.8) {
-            storedPhotoData = imageData // ✅ 存入 `AppStorage`
-            selectedPhoto = image // ✅ 更新選擇的照片
-            dismiss() // ✅ 關閉 `PhotoPickerView`
+            storedPhotoData = imageData // 存入 `AppStorage`
+            selectedPhoto = image // 更新選擇的照片
+            dismiss() // 關閉 `PhotoPickerView`
         }
     }
 }

@@ -42,7 +42,7 @@ final class CardItem: Identifiable, Codable {
             name = try container.decode(String.self, forKey: .name)
             self.birthYear = try container.decode(String.self, forKey: .birthYear)
             gender = try container.decode(String.self, forKey: .gender)
-            imageData = try? container.decode(String?.self, forKey: .imageData) // ✅ 確保 `imageData` 也能存取
+            imageData = try? container.decode(String?.self, forKey: .imageData) // 確保 `imageData` 也能存取
             
             if self.birthYear.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         self.birthYear = "2000"

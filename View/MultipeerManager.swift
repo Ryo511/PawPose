@@ -21,23 +21,23 @@ class MultipeerManager: NSObject, ObservableObject {
     @Published var isConnected: Bool = false
     @Published var receivedCards: [CardItem] = []
     
-    init(modelContext: ModelContext) { // ✅ 讓 View 傳入 ModelContext
+    init(modelContext: ModelContext) { // 讓 View 傳入 ModelContext
         self.modelContext = modelContext
         super.init()
         
         session = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .none)
         session.delegate = self
-        print("✅ MCSession 已初始化，Peer ID: \(myPeerID.displayName)")
+        print("MCSession 已初始化，Peer ID: \(myPeerID.displayName)")
         
         advertiser = MCNearbyServiceAdvertiser(peer: myPeerID, discoveryInfo: nil, serviceType: serviceType)
         advertiser.delegate = self
         advertiser.startAdvertisingPeer()
-        print("✅ 廣播已啟動")
+        print("廣播已啟動")
         
         browser = MCNearbyServiceBrowser(peer: myPeerID, serviceType: serviceType)
         browser.delegate = self
         browser.startBrowsingForPeers()
-        print("✅ 搜尋裝置已啟動")
+        print("搜尋裝置已啟動")
     }
     
     func sendMessage(_ text: String) {
@@ -68,10 +68,10 @@ class MultipeerManager: NSObject, ObservableObject {
             try session.send(jsonData, toPeers: session.connectedPeers, with: .reliable)
             
             DispatchQueue.main.async {
-                self.messages.append("📨 已發送名片: \(card.name)")
+                self.messages.append("已發送名片: \(card.name)")
             }
         } catch {
-            print("❌ 傳送名片失敗: \(error.localizedDescription)")
+            print("傳送名片失敗: \(error.localizedDescription)")
         }
     }
 }
@@ -106,7 +106,7 @@ extension MultipeerManager: MCSessionDelegate {
             let receivedCard = try JSONDecoder().decode(CardItem.self, from: data)
             
             DispatchQueue.main.async {
-                // ✅ 如果有圖片，轉換成 Data 儲存
+                // 如果有圖片，轉換成 Data 儲存
                 if let base64String = receivedCard.imageData,
                    let imageData = Data(base64Encoded: base64String) {
                     UserDefaults.standard.set(imageData, forKey: "receivedCardPhoto_\(receivedCard.id)")
@@ -114,13 +114,13 @@ extension MultipeerManager: MCSessionDelegate {
                 }
                 
                 if self.receivedCards.first(where: { $0.id == receivedCard.id }) == nil {
-                    self.modelContext.insert(receivedCard) // ✅ 使用 ModelContext 存入 SwiftData
+                    self.modelContext.insert(receivedCard) // 使用 ModelContext 存入 SwiftData
                     try? self.modelContext.save()
                     receivedCard.birthYear = receivedCard.birthYear.trimmingCharacters(in: .whitespacesAndNewlines)
                     self.receivedCards.append(receivedCard)
-                    self.messages.append("📩 收到名片: \(receivedCard.name)")
+                    self.messages.append("收到名片: \(receivedCard.name)")
                 } else {
-                    print("⚠️ 這張名片已經存在，跳過存儲")
+                    print("這張名片已經存在，跳過存儲")
                 }
             }
         } catch {
@@ -134,7 +134,7 @@ extension MultipeerManager: MCSessionDelegate {
     
     func reconnectIfNeeded() {
         if session.connectedPeers.isEmpty {
-            print("🔄 嘗試重新連線...")
+            print("嘗試重新連線...")
             browser.startBrowsingForPeers()
             advertiser.startAdvertisingPeer()
         }

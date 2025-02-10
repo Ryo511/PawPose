@@ -14,8 +14,8 @@ struct MyCardView: View {
     @Environment(\.dismiss) private var dismiss
     @Query private var item: [Item]
     @Query private var cards: [CardItem]
-    @State private var selectedPhoto: UIImage? // ✅ 存儲選擇的照片
-    @State private var isPhotoPickerPresented = false // ✅ 控制是否顯示照片選擇器
+    @State private var selectedPhoto: UIImage? // 存儲選擇的照片
+    @State private var isPhotoPickerPresented = false // 控制是否顯示照片選擇器
     @AppStorage("selectedCardPhoto") private var storedPhotoData: Data?
     
     var name: String
@@ -71,7 +71,7 @@ struct MyCardView: View {
                                             .foregroundColor(.black)
                                     }
                                     //                                .onTapGesture {
-                                    //                                    isPhotoPickerPresented = true // ✅ 點擊後選擇照片
+                                    //                                    isPhotoPickerPresented = true // 點擊後選擇照片
                                     //                                }
                                 }
                             }
@@ -91,7 +91,7 @@ struct MyCardView: View {
                         .foregroundColor(.white)
                     }
                     .onTapGesture {
-                        manager.sendCard(card) // ✅ 點擊發送名片
+                        manager.sendCard(card) // 點擊發送名片
                     }
                 }
                 
@@ -112,7 +112,7 @@ struct MyCardView: View {
                 } else {
                     Button("新規作成") {
                         let newCard = CardItem(name: "トム", birthYear: "2014", gender: "オス")
-                        modelContext.insert(newCard) // ✅ 新增名片
+                        modelContext.insert(newCard) // 新增名片
                     }
                     .padding()
                 }
@@ -120,7 +120,7 @@ struct MyCardView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        isPhotoPickerPresented = true // ✅ 點擊 + 號後開啟照片選擇器
+                        isPhotoPickerPresented = true // 點擊 + 號後開啟照片選擇器
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .foregroundColor(.blue)
@@ -136,12 +136,12 @@ struct MyCardView: View {
                     updatedCard.birthYear = updatedCard.birthYear.trimmingCharacters(in: .whitespacesAndNewlines)
                     
                     if let storedPhotoData {
-                        updatedCard.imageData = storedPhotoData.base64EncodedString() // ✅ 確保 Base64 存入
+                        updatedCard.imageData = storedPhotoData.base64EncodedString() // 確保 Base64 存入
                     }
                     
-                    try? modelContext.save() // ✅ 確保變更同步
+                    try? modelContext.save() // 確保變更同步
                 }
-                loadStoredPhoto() // ✅ 載入已儲存的照片
+                loadStoredPhoto() // 載入已儲存的照片
             }
         }
     }

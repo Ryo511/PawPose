@@ -19,7 +19,7 @@ struct CardView: View {
     @Query private var cards: [CardItem]
     @Environment(\.modelContext) private var modelContext
     
-    init(modelContext: ModelContext) { // ✅ 讓 CardView 初始化時傳入 ModelContext
+    init(modelContext: ModelContext) { // 讓 CardView 初始化時傳入 ModelContext
         _manager = StateObject(wrappedValue: MultipeerManager(modelContext: modelContext))
     }
     var body: some View {
@@ -37,20 +37,20 @@ struct CardView: View {
             Spacer()
             
             VStack {
-                List(cards) { card in // ✅ 只顯示收到的名片
-                    if card.id.uuidString != myCardID { // ✅ 過濾掉自己的名片
+                List(cards) { card in // 只顯示收到的名片
+                    if card.id.uuidString != myCardID { // 過濾掉自己的名片
                         if let base64String = card.imageData,
                            let imageData = Data(base64Encoded: base64String),
                            let receivedImage = UIImage(data: imageData) {
                             Image(uiImage: receivedImage)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 80, height: 80) // ✅ 設定尺寸
+                                .frame(width: 80, height: 80) // 設定尺寸
                                 .clipShape(Circle())
                                 .overlay(Circle().stroke(Color.white, lineWidth: 2))
                                 .shadow(radius: 5)
                         } else {
-                            // ✅ 如果沒有圖片，顯示一個預設圖示
+                            // 如果沒有圖片，顯示一個預設圖示
                             Image(systemName: "person.crop.circle.fill")
                                 .resizable()
                                 .scaledToFit()
@@ -81,19 +81,19 @@ struct CardView: View {
                 manager.reconnectIfNeeded()
                 
                 if let myCard = cards.first {
-                    myCardID = myCard.id.uuidString // ✅ 設定自己的名片 ID
+                    myCardID = myCard.id.uuidString // 設定自己的名片 ID
                 }
             }
             .onReceive(manager.$receivedCards) { newCards in
                 manager.reconnectIfNeeded()
                 
                 for card in newCards {
-                    if !cards.contains(where: { $0.id == card.id }) { // ✅ 避免重複存入
-                        modelContext.insert(card) // ✅ 存入 SwiftData
+                    if !cards.contains(where: { $0.id == card.id }) { // 避免重複存入
+                        modelContext.insert(card) // 存入 SwiftData
                     }
                 }
                 
-                try? modelContext.save() // ✅ 強制存檔
+                try? modelContext.save() // 強制存檔
             }
             
             //            Button("清空名片") {
@@ -148,10 +148,10 @@ struct CardView: View {
     }
     
     //    private func deleteAllCards() {
-    //        for card in cards { // ✅ 遍歷所有名片
+    //        for card in cards { // 遍歷所有名片
     //            modelContext.delete(card)
     //        }
-    //        try? modelContext.save() // ✅ 儲存變更
+    //        try? modelContext.save() // 儲存變更
     //    }
 }
 

@@ -22,7 +22,7 @@ struct HomeView: View {
                     
                     ForEach(groupedItems.keys.sorted(), id: \.self) { date in
                         VStack(alignment: .leading) {
-                            Text(date, format: Date.FormatStyle(date: .long))
+                            Text(formatDate(date))
                                 .font(.headline)
                                 .padding(.leading)
                             
@@ -58,6 +58,14 @@ struct HomeView: View {
             }
         }
     }
+    
+    func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ja_JP")
+        formatter.dateFormat = "yyyy年MM月dd日 (E)"
+        
+        return formatter.string(from: date)
+    }
 }
 
 struct PhotoDetailView: View {
@@ -72,7 +80,7 @@ struct PhotoDetailView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(maxWidth: 300, maxHeight: 300)
+//                        .frame(maxWidth: 300, maxHeight: 300)
                         .cornerRadius(20)
                 }
 
@@ -82,12 +90,12 @@ struct PhotoDetailView: View {
                     }) {
                         Image(systemName: "trash.circle.fill")
                             .foregroundColor(.red)
+                            .font(.title)
                     }
                     .padding(5)
                 }
             }
         }
-        .navigationTitle("Photo Details")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { isEditing.toggle() }) {
