@@ -72,6 +72,7 @@ struct PhotoDetailView: View {
     let item: Item
     var deleteAction: (Item) -> Void
     @State private var isEditing = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ScrollView {
@@ -87,6 +88,7 @@ struct PhotoDetailView: View {
                 if isEditing {
                     Button(action: {
                         deleteAction(item)
+                        dismiss()
                     }) {
                         Image(systemName: "trash.circle.fill")
                             .foregroundColor(.red)

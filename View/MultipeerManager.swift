@@ -21,9 +21,15 @@ class MultipeerManager: NSObject, ObservableObject {
     @Published var isConnected: Bool = false
     @Published var receivedCards: [CardItem] = []
     
+    private var sentCardIDs: [String] = []
+    
     init(modelContext: ModelContext) { // 讓 View 傳入 ModelContext
         self.modelContext = modelContext
         super.init()
+        
+        if let sentCardIDs = UserDefaults.standard.array(forKey: "sentCardIDs") as? [String] {
+            self.sentCardIDs = sentCardIDs
+        }
         
         session = MCSession(peer: myPeerID, securityIdentity: nil, encryptionPreference: .none)
         session.delegate = self
@@ -38,6 +44,20 @@ class MultipeerManager: NSObject, ObservableObject {
         browser.delegate = self
         browser.startBrowsingForPeers()
         print("搜尋裝置已啟動")
+        
+        fetchReceivedCards()
+    }
+    
+    private func fetchReceivedCards() {
+        let descriptor = FetchDescriptor<CardItem>() // 抓取所有 CardItem
+        do {
+            let items = try modelContext.fetch(descriptor)
+            DispatchQueue.main.async {
+                self.receivedCards = items
+            }
+        } catch {
+            print("錯誤抓取已接收名片：\(error)")
+        }
     }
     
     func sendMessage(_ text: String) {
@@ -49,6 +69,19 @@ class MultipeerManager: NSObject, ObservableObject {
             }
         } catch {
             print("發送失敗: \(error.localizedDescription)")
+        }
+    }
+    
+    func hasSentCard(_ card: CardItem) -> Bool {
+        return sentCardIDs.contains(card.id.uuidString)
+    }
+    
+    // 修改為當發送名片後更新已發送的 ID
+    func markCardAsSent(_ card: CardItem) {
+        var sentCardIDs = UserDefaults.standard.array(forKey: "sentCardIDs") as? [String] ?? []
+        if !sentCardIDs.contains(card.id.uuidString) {
+            sentCardIDs.append(card.id.uuidString)
+            UserDefaults.standard.set(sentCardIDs, forKey: "sentCardIDs")
         }
     }
     
@@ -70,6 +103,8 @@ class MultipeerManager: NSObject, ObservableObject {
             DispatchQueue.main.async {
                 self.messages.append("已發送名片: \(card.name)")
             }
+            
+            markCardAsSent(card)
         } catch {
             print("傳送名片失敗: \(error.localizedDescription)")
         }
@@ -106,21 +141,28 @@ extension MultipeerManager: MCSessionDelegate {
             let receivedCard = try JSONDecoder().decode(CardItem.self, from: data)
             
             DispatchQueue.main.async {
-                // 如果有圖片，轉換成 Data 儲存
-                if let base64String = receivedCard.imageData,
-                   let imageData = Data(base64Encoded: base64String) {
-                    UserDefaults.standard.set(imageData, forKey: "receivedCardPhoto_\(receivedCard.id)")
-                    receivedCard.imageData = base64String
-                }
+                let predicate = #Predicate<CardItem> { $0.id == receivedCard.id }
+                let descriptor = FetchDescriptor<CardItem>(predicate: predicate)
                 
-                if self.receivedCards.first(where: { $0.id == receivedCard.id }) == nil {
-                    self.modelContext.insert(receivedCard) // 使用 ModelContext 存入 SwiftData
-                    try? self.modelContext.save()
-                    receivedCard.birthYear = receivedCard.birthYear.trimmingCharacters(in: .whitespacesAndNewlines)
-                    self.receivedCards.append(receivedCard)
-                    self.messages.append("收到名片: \(receivedCard.name)")
-                } else {
-                    print("這張名片已經存在，跳過存儲")
+                do {
+                    let existingCards = try self.modelContext.fetch(descriptor)
+                    if existingCards.isEmpty { // 名片是新的，才插入
+                        receivedCard.birthYear = receivedCard.birthYear.trimmingCharacters(in: .whitespacesAndNewlines)
+                        self.modelContext.insert(receivedCard)
+                        try? self.modelContext.save()
+                        self.receivedCards.append(receivedCard) // 更新已發布的陣列
+                        self.messages.append("收到名片: \(receivedCard.name)")
+                        // ... (處理圖片資料，如同之前一樣)
+                    } else {
+                        print("這張名片已經存在，跳過儲存")
+                        // 如果需要更新現有名片，可以在這裡處理。
+                        // 例如：
+                        // let existingCard = existingCards.first!
+                        // existingCard.name = receivedCard.name // 根據需要更新屬性
+                        // try? self.modelContext.save()
+                    }
+                } catch {
+                    print("檢查現有名片時發生錯誤：\(error)")
                 }
             }
         } catch {
