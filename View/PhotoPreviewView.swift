@@ -187,7 +187,7 @@ struct PhotoPreviewView: View {
                             Image(systemName: "trash")
                                 .resizable()
                                 .frame(width: 30, height: 30)
-                                .foregroundColor(isDeleteMode ? .red : .black)
+                                .foregroundColor(isDeleteMode ? .red : .blue)
                         }
                         
                         Button(action: {
