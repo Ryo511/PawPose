@@ -16,6 +16,7 @@ class MultipeerManager: NSObject, ObservableObject {
     private var advertiser: MCNearbyServiceAdvertiser!
     private var browser: MCNearbyServiceBrowser!
     private var modelContext: ModelContext
+    private weak var viewController: UIViewController?
     
     @Published var messages: [String] = []
     @Published var isConnected: Bool = false
@@ -23,7 +24,7 @@ class MultipeerManager: NSObject, ObservableObject {
     
     private var sentCardIDs: [String] = []
     
-    init(modelContext: ModelContext) { // 讓 View 傳入 ModelContext
+    init(modelContext: ModelContext, viewController: UIViewController) { // 讓 View 傳入 ModelContext
         self.modelContext = modelContext
         super.init()
         
@@ -84,6 +85,8 @@ class MultipeerManager: NSObject, ObservableObject {
             UserDefaults.standard.set(sentCardIDs, forKey: "sentCardIDs")
         }
     }
+    
+    
     
     func sendCard(_ card: CardItem) {
         do {
@@ -185,8 +188,26 @@ extension MultipeerManager: MCSessionDelegate {
 
 extension MultipeerManager: MCNearbyServiceAdvertiserDelegate {
     func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
-        invitationHandler(true, session)
-    }
+            // 使用傳入的 viewController 顯示警告
+            guard let viewController = self.viewController else { return }
+            
+            let alert = UIAlertController(title: "接続を許可しますか？", message: "許可すると通信が可能になります", preferredStyle: .alert)
+            
+            let delete = UIAlertAction(title: "許可", style: .default, handler: { (action) -> Void in
+                invitationHandler(true, self.session)
+                print("許可")
+            })
+            
+            let cancel = UIAlertAction(title: "拒否", style: .cancel, handler: { (action) -> Void in
+                invitationHandler(false, self.session)
+                print("拒否")
+            })
+            
+            alert.addAction(delete)
+            alert.addAction(cancel)
+            
+            viewController.present(alert, animated: true, completion: nil)
+        }
 }
 
 extension MultipeerManager: MCNearbyServiceBrowserDelegate {

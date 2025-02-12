@@ -122,8 +122,8 @@ struct MyCardView: View {
                     Button(action: {
                         isPhotoPickerPresented = true // 點擊 + 號後開啟照片選擇器
                     }) {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(.blue)
+                        Image(systemName: "photo.circle")
+                            .foregroundColor(.orange)
                             .font(.title)
                     }
                 }
@@ -155,8 +155,8 @@ struct MyCardView: View {
 #Preview {
     if let modelContainer = try? ModelContainer(for: CardItem.self) {
         let modelContext = ModelContext(modelContainer)
-        return MyCardView(manager: MultipeerManager(modelContext: modelContext), name: "トム", birthYear: "2014", gender: "オス")
+        MyCardView(manager: MultipeerManager(modelContext: modelContext, viewController: UIViewController()), name: "トム", birthYear: "2014", gender: "オス")
     } else {
-        return Text("⚠️ 無法初始化 ModelContext")
+        Text("⚠️ 無法初始化 ModelContext")
     }
 }

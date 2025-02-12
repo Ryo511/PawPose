@@ -24,6 +24,7 @@ struct CameraView: View {
     @State private var selectedPhotos: [IdentifiableImage] = []
     @State private var editingPhoto: IdentifiableImage? = nil
     @ObservedObject var locationManager = LocationManager()
+    @State private var musiclist: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -81,19 +82,56 @@ struct CameraView: View {
                 }
             }
             .padding(.bottom, 50)
-            .overlay(
-                CameraToolView(
-                    selectedMusic: $selectedMusic,
-                    isPlaying: $isPlaying,
-                    onPlayPause: toggleMusicPlayback
-                )
-                .padding(.top, 570)
-            )
+//            .overlay(
+//                CameraToolView(
+//                    selectedMusic: $selectedMusic,
+//                    isPlaying: $isPlaying,
+//                    onPlayPause: toggleMusicPlayback
+//                )
+//                .padding(.top, 570)
+//            )
+//            .fullScreenCover(isPresented: $isPresented) {
+//                VStack {
+//                    ImagePickerView(capturedImage: $capturedImage, isPresented: $isPresented) {
+//                        handleCapturedImage()
+//                    }
+//                    .edgesIgnoringSafeArea(.all)
             .fullScreenCover(isPresented: $isPresented) {
-                ImagePickerView(capturedImage: $capturedImage, isPresented: $isPresented) {
-                    handleCapturedImage()
+                ZStack {
+                    Color.black.ignoresSafeArea()
+                    
+                    ImagePickerView(capturedImage: $capturedImage, isPresented: $isPresented) {
+                        handleCapturedImage()
+                    }
+                    .edgesIgnoringSafeArea(.all)
+                    
+                    VStack {
+                        Spacer()
+                        HStack {
+                            CameraToolView(
+                                selectedMusic: $selectedMusic,
+                                isPlaying: $isPlaying,
+                                onPlayPause: toggleMusicPlayback
+                            )
+                            .padding(.leading, 5)
+                            Spacer()
+                        }
+                        Spacer()
+                    }
+                    
+//                        Button(action: {
+//                            musiclist = true
+//                        }) {
+//                            Image(systemName: "music")
+//                                .font(.title3)
+//                        }
+//                        .sheet(isPresented: $musiclist) {
+//                            SoundView(selectedMusic: $selectedMusic)
+//                        }
+                    }
+                .onDisappear {
+                    stopMusic()
                 }
-                .edgesIgnoringSafeArea(.all)
             }
             .onChange(of: capturedImage) { _, _ in
                 if let capturedImage, !isImageProcessed {

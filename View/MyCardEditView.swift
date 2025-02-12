@@ -61,7 +61,7 @@ struct MyCardEditView: View {
             .padding()
             .onAppear {
                 /// 進入「編輯」時刪除 `birthYear`
-                card.birthYear = ""
+//                card.birthYear = ""
                 try? modelContext.save()
             }
             

@@ -47,6 +47,7 @@ struct HomeView: View {
                     }
                 }
             }
+            .navigationTitle("写真集")
         }
     }
     

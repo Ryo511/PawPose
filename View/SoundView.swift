@@ -12,7 +12,7 @@ struct SoundView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedMusic: String?
     @State private var audioPlayer: AVAudioPlayer?
-    private let musicFiles = (1...21).map { "music_\($0)" }
+    private let musicFiles = (1...23).map { "🎵\($0)" }
     
     var body: some View {
         NavigationStack {
@@ -56,7 +56,9 @@ struct SoundView: View {
     }
 
     private func playMusic(named name: String) {
+        if audioPlayer?.isPlaying == true {
         stopMusic()
+    }
         guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
             print("找不到音频文件: \(name)")
             return

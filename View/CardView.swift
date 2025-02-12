@@ -20,7 +20,7 @@ struct CardView: View {
     @Environment(\.modelContext) private var modelContext
     
     init(modelContext: ModelContext) { // 讓 CardView 初始化時傳入 ModelContext
-        _manager = StateObject(wrappedValue: MultipeerManager(modelContext: modelContext))
+        _manager = StateObject(wrappedValue: MultipeerManager(modelContext: modelContext, viewController: UIViewController()))
     }
     var body: some View {
         NavigationStack {
