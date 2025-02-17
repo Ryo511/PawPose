@@ -20,7 +20,7 @@ struct CardView: View {
     @Environment(\.modelContext) private var modelContext
     
     init(modelContext: ModelContext) { // 讓 CardView 初始化時傳入 ModelContext
-        _manager = StateObject(wrappedValue: MultipeerManager(modelContext: modelContext, viewController: UIViewController()))
+        _manager = StateObject(wrappedValue: MultipeerManager(modelContext: modelContext))
     }
     var body: some View {
         NavigationStack {
@@ -61,7 +61,7 @@ struct CardView: View {
                         VStack(alignment: .leading) {
                             Text("名前: \(card.name)")
                                 .font(.headline)
-                            Text("年齢: \(card.calculateAge()) 歳")
+                            Text("年齢: \(card.calculateAge(from: String(card.birthYear))) 歳")
                                 .font(.subheadline)
                             Text("性別: \(card.gender)")
                                 .font(.subheadline)

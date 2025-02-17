@@ -81,7 +81,7 @@ struct MyCardView: View {
                             Text("名前: \(card.name)")
                                 .font(.system(size: 25))
                                 .padding(5)
-                            Text("年齢: \(card.calculateAge()) 歳")
+                            Text("年齢: \(card.calculateAge(from: String(card.birthYear))) 歳")
                                 .font(.system(size: 25))
                                 .padding(5)
                             Text("性別: \(card.gender)")
@@ -155,8 +155,8 @@ struct MyCardView: View {
 #Preview {
     if let modelContainer = try? ModelContainer(for: CardItem.self) {
         let modelContext = ModelContext(modelContainer)
-        MyCardView(manager: MultipeerManager(modelContext: modelContext, viewController: UIViewController()), name: "トム", birthYear: "2014", gender: "オス")
+        return MyCardView(manager: MultipeerManager(modelContext: modelContext), name: "トム", birthYear: "2014", gender: "オス")
     } else {
-        Text("⚠️ 無法初始化 ModelContext")
+        return Text("⚠️ 無法初始化 ModelContext")
     }
 }

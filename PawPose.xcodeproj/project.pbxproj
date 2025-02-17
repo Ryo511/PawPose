@@ -108,12 +108,12 @@
 				A79908F52D1B8FDD0026F220 /* CameraPhotoView.swift */,
 				A757BEE02D13AF70007CBF26 /* CameraToolView.swift */,
 				A757BEE22D13B1DF007CBF26 /* PhotoPreviewView.swift */,
+				A72727112D4B7AA600D3F514 /* PhotoPickerView.swift */,
 				A757BEDE2D13A8BD007CBF26 /* ImagePickerView.swift */,
 				A7FE66472D0FCC56009D0578 /* SoundView.swift */,
 				A7143EC62D09160F0061B5D5 /* CardView.swift */,
 				A79908F72D26B4F60026F220 /* MyCardView.swift */,
 				A75681142D4A7F5700D4E141 /* MyCardEditView.swift */,
-				A72727112D4B7AA600D3F514 /* PhotoPickerView.swift */,
 				A75681162D4B004300D4E141 /* MultipeerManager.swift */,
 				A757BED72D1251AE007CBF26 /* Sound */,
 			);
@@ -359,7 +359,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -397,7 +397,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

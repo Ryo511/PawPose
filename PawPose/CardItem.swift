@@ -61,7 +61,12 @@ final class CardItem: Identifiable, Codable {
             }
         }
     
-    func calculateAge() -> Int {
+    func calculateAge(from birthYear: String) -> Int {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd" // 確保格式正確
+        formatter.locale = Locale(identifier: "en_US_POSIX") // 避免語系影響
+        formatter.timeZone = TimeZone(secondsFromGMT: 0) // 確保時區統一
+        
             let currentYear = Calendar.current.component(.year, from: Date())
             guard let birthYearInt = Int(birthYear.trimmingCharacters(in: .whitespacesAndNewlines)),
                   birthYearInt > 1900,
