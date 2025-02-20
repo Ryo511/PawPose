@@ -36,12 +36,21 @@ struct MyCardView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                if let card = cards.first {
+                    Button(action: {
+                        manager.sendCard(card)
+                    }) {
+                        Image(systemName: "paperplane")
+                            .font(.title)
+                    }
+                }
+                
                 Spacer()
                 if let card = cards.first {
                     ZStack {
                         Rectangle()
                             .fill(Color.brown.opacity(0.8))
-                            .frame(width: 350, height: 550)
+                            .frame(width: 350, height: 500)
                             .cornerRadius(50)
                         
                         VStack {
@@ -77,7 +86,6 @@ struct MyCardView: View {
                             }
                             .padding(.bottom, 40)
                             
-                            
                             Text("名前: \(card.name)")
                                 .font(.system(size: 25))
                                 .padding(5)
@@ -90,9 +98,9 @@ struct MyCardView: View {
                         }
                         .foregroundColor(.white)
                     }
-                    .onTapGesture {
-                        manager.sendCard(card) // 點擊發送名片
-                    }
+//                    .onTapGesture {
+//                        manager.sendCard(card) // 點擊發送名片
+//                    }
                 }
                 
                 Spacer()

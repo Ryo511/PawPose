@@ -15,44 +15,32 @@ struct CameraToolView: View {
     @State private var showSoundView: Bool = false
     
     var body: some View {
-        VStack(spacing: 50) {
-//            NavigationLink(destination: SoundView(selectedMusic: $selectedMusic)) {
+        VStack(spacing: 45) {
+            //            NavigationLink(destination: SoundView(selectedMusic: $selectedMusic)) {
             Button(action: {
                 showSoundView.toggle()
             }) {
-                ZStack {
-                    Circle()
-                        .frame(width: 40, height: 40)
-                        .foregroundStyle(Color.pink)
-                    
-                    Image(systemName: "music.note")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                        .foregroundStyle(Color.white)
-                }
+                Image(systemName: "music.note")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(Color.white)
             }
             .sheet(isPresented: $showSoundView) { // 這裡使用 sheet
-                            SoundView(selectedMusic: $selectedMusic) // 顯示 SoundView
-                        }
-                
-//            }
+                SoundView(selectedMusic: $selectedMusic) // 顯示 SoundView
+            }
+            
+            //            }
             
             Button {
                 onPlayPause()
             } label: {
-                ZStack {
-                    Circle()
-                        .frame(width: 40, height: 40)
-                        .foregroundStyle(Color.pink)
-                    
-                    Image(systemName: isPlaying ? "pause.fill" : "play.fill")
-                        .resizable()
-                        .frame(width: 15, height: 15)
-                        .foregroundStyle(Color.white)
-                }
+                Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                    .resizable()
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(Color.white)
             }
         }
-//        .padding()
+                .padding()
     }
 }
 

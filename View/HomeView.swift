@@ -73,6 +73,7 @@ struct PhotoDetailView: View {
     let item: Item
     var deleteAction: (Item) -> Void
     @State private var isEditing = false
+    @State private var showAlert = false
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -82,32 +83,54 @@ struct PhotoDetailView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-//                        .frame(maxWidth: 300, maxHeight: 300)
+                    //                        .frame(maxWidth: 300, maxHeight: 300)
                         .cornerRadius(20)
                 }
-
-                if isEditing {
-                    Button(action: {
-                        deleteAction(item)
-                        dismiss()
-                    }) {
-                        Image(systemName: "trash.circle.fill")
-                            .foregroundColor(.red)
-                            .font(.title)
-                    }
-                    .padding(5)
-                }
+                
+                //                if isEditing {
+                //                    Button(action: {
+                //                        showAlert = true
+                //                    }) {
+                //                        Image(systemName: "trash.circle.fill")
+                //                            .foregroundColor(.red)
+                //                            .font(.title)
+                //                    }
+                //                    .padding(5)
+                //                    .alert("削除する", isPresented: $showAlert) {
+                //                        Button("キャンセル", role: .cancel) {}
+                //                        Button("削除", role: .destructive) {
+                //                            deleteAction(item)
+                //                            dismiss()
+                //                        }
+                //                    } message: {
+                //                        Text("削除しますか？")
+                //                    }
+                //                }
             }
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { isEditing.toggle() }) {
-                    Text(isEditing ? "Done" : "Edit")
+                if !showAlert {
+                    Button(action: { showAlert = true }) {
+                        Text("削除")
+                    }
                 }
             }
         }
+        .alert("削除する", isPresented: $showAlert) {
+            Button("キャンセル", role: .cancel) {
+                showAlert = false
+            }
+            Button("削除", role: .destructive) {
+                deleteAction(item)
+                dismiss()
+            }
+        } message: {
+            Text("削除しますか？")
+        }
     }
 }
+
 
 #Preview {
     HomeView()

@@ -12,7 +12,31 @@ struct SoundView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedMusic: String?
     @State private var audioPlayer: AVAudioPlayer?
-    private let musicFiles = (1...23).map { "🎵\($0)" }
+    //    private let musicFiles = (1...23).map { "🎵\($0)" }
+    private let musicFiles = ["犬吠える1", "犬吠える2", "犬吠える3", "犬吠える4", "12時", "正しい", "物落ち", "花火1", "花火2", "風鈴", "飛行機", "掃除機", "船", "硬貨", "楽器", "道具", "蝉", "銅", "爆発", "バイク", "ピンポン"]
+    
+    private let musicFileMapping: [String: String] = [
+        "犬吠える1": "犬吠える1",
+        "犬吠える2": "犬吠える2",
+        "犬吠える3": "犬吠える3",
+        "犬吠える4": "犬吠える4",
+        "12時": "12時",
+        "正しい": "正しい",
+        "物落ち": "物落ち",
+        "花火1": "花火1",
+        "花火2": "花火2",
+        "風鈴": "風鈴",
+        "飛行機": "飛行機",
+        "掃除機": "掃除機",
+        "船": "船",
+        "硬貨": "硬貨",
+        "楽器": "楽器",
+        "道具": "道具",
+        "蝉": "蝉",
+        "銅": "銅",
+        "爆発": "爆発",
+        "バイク": "バイク",
+        "ピンポン": "ピンポン" ]
     
     var body: some View {
         NavigationStack {
@@ -38,28 +62,30 @@ struct SoundView: View {
             }
             .navigationTitle("全部の音")
         }
-
-//        Button {
-//            dismiss()
-//        } label: {
-//            ZStack {
-//                Rectangle()
-//                    .frame(width: 90, height: 50)
-//                    .foregroundStyle(Color.brown)
-//                    .cornerRadius(25)
-//                Text("選択")
-//                    .foregroundStyle(Color.white)
-//                    .bold()
-//            }
-//        }
-//        .padding()
+        
+        //        Button {
+        //            dismiss()
+        //        } label: {
+        //            ZStack {
+        //                Rectangle()
+        //                    .frame(width: 90, height: 50)
+        //                    .foregroundStyle(Color.brown)
+        //                    .cornerRadius(25)
+        //                Text("選択")
+        //                    .foregroundStyle(Color.white)
+        //                    .bold()
+        //            }
+        //        }
+        //        .padding()
     }
-
+    
     private func playMusic(named name: String) {
         if audioPlayer?.isPlaying == true {
-        stopMusic()
-    }
-        guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
+            stopMusic()
+        }
+        
+        guard let music = musicFileMapping[name],
+              let url = Bundle.main.url(forResource: name, withExtension: "mp3") else {
             print("找不到音频文件: \(name)")
             return
         }
@@ -71,7 +97,7 @@ struct SoundView: View {
             print("无法播放音频: \(error.localizedDescription)")
         }
     }
-
+    
     private func stopMusic() {
         audioPlayer?.stop()
         audioPlayer = nil

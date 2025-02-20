@@ -18,10 +18,6 @@ struct PhotoPickerView: View {
         NavigationStack {
             ScrollView {
                 VStack {
-                    Text("選擇一張照片")
-                        .font(.headline)
-                        .padding()
-
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                         ForEach(items) { item in
                             if let photoData = item.photoData, let uiImage = UIImage(data: photoData) {
@@ -39,10 +35,10 @@ struct PhotoPickerView: View {
                 }
                 .padding()
             }
-            .navigationTitle("選擇照片")
+            .navigationTitle("写真を選択")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("取消") {
+                    Button("キャンセル") {
                         dismiss() // 讓使用者可以取消選擇
                     }
                 }
