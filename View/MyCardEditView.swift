@@ -56,6 +56,12 @@ struct MyCardEditView: View {
                     }
                 }
                 
+                Text("Instagram")
+                    .font(.system(size: 18))
+                
+                TextField("Instagramを入力してください", text: Binding(get: {card.instagram ?? ""}, set: { card.instagram = $0 }))
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
                 Spacer()
             }
             .padding()
@@ -87,5 +93,5 @@ struct MyCardEditView: View {
 
 
 #Preview {
-    MyCardEditView(card: CardItem(name: "トム", birthYear: "2015", gender: "オス"))
+    MyCardEditView(card: CardItem(name: "トム", birthYear: "2015", gender: "オス", instagram: "tom"))
 }

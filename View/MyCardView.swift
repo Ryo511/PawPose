@@ -95,6 +95,9 @@ struct MyCardView: View {
                             Text("性別: \(card.gender)")
                                 .font(.system(size: 25))
                                 .padding(5)
+                            Text("Instagram: \(card.instagram ?? "")")
+                                .font(.system(size: 25))
+                                .padding(5)
                         }
                         .foregroundColor(.white)
                     }
@@ -119,7 +122,7 @@ struct MyCardView: View {
                     }
                 } else {
                     Button("新規作成") {
-                        let newCard = CardItem(name: "トム", birthYear: "2014", gender: "オス")
+                        let newCard = CardItem(name: "トム", birthYear: "2014", gender: "オス", instagram: "")
                         modelContext.insert(newCard) // 新增名片
                     }
                     .padding()

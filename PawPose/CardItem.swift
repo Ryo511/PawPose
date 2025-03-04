@@ -15,12 +15,14 @@ final class CardItem: Identifiable, Codable {
     var birthYear: String
     var gender: String
     var imageData: String?
+    var instagram: String?
     
-    init(name: String, birthYear: String, gender: String, imageData: String? = nil) {
+    init(name: String, birthYear: String, gender: String, imageData: String? = nil, instagram: String) {
         self.name = name
         self.birthYear = birthYear.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "2000" : birthYear
         self.gender = gender
         self.imageData = imageData
+        self.instagram = instagram
     }
     
     var age: Int {
@@ -33,7 +35,7 @@ final class CardItem: Identifiable, Codable {
     }
     
     enum CodingKeys: String, CodingKey {
-            case id, name, birthYear, gender, imageData
+            case id, name, birthYear, gender, imageData, instagram
         }
         
         required init(from decoder: Decoder) throws {
@@ -43,6 +45,7 @@ final class CardItem: Identifiable, Codable {
             self.birthYear = try container.decode(String.self, forKey: .birthYear)
             gender = try container.decode(String.self, forKey: .gender)
             imageData = try? container.decode(String?.self, forKey: .imageData) // 確保 `imageData` 也能存取
+            instagram = try? container.decode(String?.self, forKey: .instagram) // 確保 `instagram` 也能存取
             
             if self.birthYear.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                         self.birthYear = "2000"
@@ -55,6 +58,8 @@ final class CardItem: Identifiable, Codable {
             try container.encode(name, forKey: .name)
             try container.encode(birthYear, forKey: .birthYear)
             try container.encode(gender, forKey: .gender)
+            try container.encode(imageData, forKey: .imageData)
+            try container.encode(instagram, forKey: .instagram)
             
             if let imageData {
                 try container.encode(imageData, forKey: .imageData)
